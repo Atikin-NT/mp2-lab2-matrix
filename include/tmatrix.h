@@ -211,6 +211,8 @@ class TDynamicMatrix : private TDynamicVector<TDynamicVector<T>>
 public:
   TDynamicMatrix(size_t s = 1) : TDynamicVector<TDynamicVector<T>>(s)
   {
+    if(s > MAX_MATRIX_SIZE)
+      throw out_of_range("s is under MAX_MATRIX_SIZE");
     for (size_t i = 0; i < sz; i++)
       pMem[i] = TDynamicVector<T>(sz);
   }
@@ -233,9 +235,8 @@ public:
   TDynamicVector<T> operator*(const T& val)
   {
       TDynamicMatrix tmp(sz);
-      for (int i = 0; i < sz; i++) {
+      for (int i = 0; i < sz; i++)
           tmp.pMem[i] = pMem[i] * val;
-      }
       return tmp;
   }
 
@@ -243,9 +244,8 @@ public:
   TDynamicVector<T> operator*(const TDynamicVector<T>& v)
   {
       TDynamicVector<T> tmp(sz);
-      for (int i = 0; i < sz; i++) {
+      for (int i = 0; i < sz; i++)
           tmp[i] = pMem[i] * v;
-      }
       return tmp;
   }
 
@@ -254,32 +254,26 @@ public:
   {
       int maxSize = sz > m.sz ? sz : m.sz;
       TDynamicMatrix tmp(maxSize);
-      int i =0;
-      for (; i < sz && i < m.sz; i++) {
+      int i = 0;
+      for (; i < sz && i < m.sz; i++)
           tmp.pMem[i] = pMem[i] + m.pMem[i];
-      }
-      for (; i < sz; i++) {
+      for (; i < sz; i++)
           tmp.pMem[i] = pMem[i];
-      }
-      for (; i < sz; i++) {
+      for (; i < m.sz; i++)
           tmp.pMem[i] = m.pMem[i];
-      }
       return tmp;
   }
   TDynamicMatrix operator-(const TDynamicMatrix& m)
   {
       int maxSize = sz > m.sz ? sz : m.sz;
       TDynamicMatrix tmp(maxSize);
-      int i =0;
-      for (; i < sz && i < m.sz; i++) {
+      int i = 0;
+      for (; i < sz && i < m.sz; i++)
           tmp.pMem[i] = pMem[i] - m.pMem[i];
-      }
-      for (; i < sz; i++) {
+      for (; i < sz; i++)
           tmp.pMem[i] = pMem[i];
-      }
-      for (; i < sz; i++) {
+      for (; i < m.sz; i++)
           tmp.pMem[i] = m.pMem[i] * (-1);
-      }
       return tmp;
   }
   TDynamicMatrix operator*(const TDynamicMatrix& m)
@@ -296,7 +290,7 @@ public:
   friend ostream& operator<<(ostream& ostr, const TDynamicMatrix& v)
   {
       for (size_t i = 0; i < v.sz; i++)
-          ostr << v.pMem[i] << ' '; // требуется оператор<< для типа T
+          ostr << v.pMem[i] << endl; // требуется оператор<< для типа T
       return ostr;
   }
 };

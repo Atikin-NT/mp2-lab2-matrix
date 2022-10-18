@@ -34,7 +34,10 @@ TEST(TDynamicMatrix, copied_matrix_is_equal_to_source_one)
 
 TEST(TDynamicMatrix, copied_matrix_has_its_own_memory)
 {
-  ADD_FAILURE();
+    TDynamicMatrix<int> m1(5);
+    TDynamicMatrix<int> m2(m1);
+    m1[0][0] = 5;
+    EXPECT_EQ(0, m2[0][0]);
 }
 
 TEST(TDynamicMatrix, can_get_size)
@@ -71,7 +74,11 @@ TEST(TDynamicMatrix, can_assign_matrix_to_itself)
 TEST(TDynamicMatrix, can_assign_matrices_of_equal_size)
 {
     TDynamicMatrix<int> m1(3), m2(3);
-    ASSERT_NO_THROW(m1 = m2);
+    m1[0][0] = 1;
+    m1[2][1] = 3;
+    m2 = m1;
+    EXPECT_EQ(1, m2[0][0]);
+    EXPECT_EQ(3, m2[2][1]);
 }
 
 TEST(TDynamicMatrix, assign_operator_change_matrix_size)
@@ -83,8 +90,12 @@ TEST(TDynamicMatrix, assign_operator_change_matrix_size)
 
 TEST(TDynamicMatrix, can_assign_matrices_of_different_size)
 {
-    TDynamicMatrix<int> m1(2), m2(4);
-    ASSERT_NO_THROW(m1 = m2);
+    TDynamicMatrix<int> m1(4), m2(2);
+    m1[0][0] = 1;
+    m1[2][1] = 3;
+    m2 = m1;
+    EXPECT_EQ(1, m2[0][0]);
+    EXPECT_EQ(0, m2[1][1]);
 }
 
 TEST(TDynamicMatrix, compare_equal_matrices_return_true)
