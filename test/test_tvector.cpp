@@ -26,7 +26,7 @@ TEST(TDynamicVector, can_create_copied_vector)
 
 TEST(TDynamicVector, copied_vector_is_equal_to_source_one)
 {
-    TDynamicVector<int> v1(10);
+    TDynamicVector<int> v1(5);
     v1[0] = 5;
     TDynamicVector<int> v2(v1);
     EXPECT_EQ(5, v2[0]);
@@ -34,7 +34,10 @@ TEST(TDynamicVector, copied_vector_is_equal_to_source_one)
 
 TEST(TDynamicVector, copied_vector_has_its_own_memory)
 {
-  ADD_FAILURE();
+    TDynamicVector<int> v1(5);
+    TDynamicVector<int> v2(v1);
+    v1[0] = 5;
+    EXPECT_EQ(0, v2[0]);
 }
 
 TEST(TDynamicVector, can_get_size)
@@ -42,14 +45,6 @@ TEST(TDynamicVector, can_get_size)
   TDynamicVector<int> v(4);
   EXPECT_EQ(4, v.size());
 }
-
-//TEST(TDynamicVector, can_set_and_get_element)
-//{
-//  TDynamicVector<int> v(4);
-//  v[0] = 4;
-//
-//  EXPECT_EQ(4, v[0]);
-//}
 
 TEST(TDynamicVector, throws_when_set_element_with_negative_index)
 {
@@ -72,6 +67,7 @@ TEST(TDynamicVector, can_assign_vector_to_itself)
 TEST(TDynamicVector, can_assign_vectors_of_equal_size)
 {
     TDynamicVector<int> v1(4), v2(4);
+    //TODO: добавить проверку по значению?
     ASSERT_NO_THROW(v1 = v2);
 }
 
@@ -85,6 +81,7 @@ TEST(TDynamicVector, assign_operator_change_vector_size)
 TEST(TDynamicVector, can_assign_vectors_of_different_size)
 {
     TDynamicVector<int> v1(2), v2(4);
+    //TODO: добавить проверку по значению?
     ASSERT_NO_THROW(v1 = v2);
 }
 
