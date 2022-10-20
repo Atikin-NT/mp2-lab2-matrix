@@ -208,6 +208,14 @@ class TDynamicMatrix : private TDynamicVector<TDynamicVector<T>>
 {
   using TDynamicVector<TDynamicVector<T>>::pMem;
   using TDynamicVector<TDynamicVector<T>>::sz;
+
+  TDynamicMatrix transpose(const TDynamicMatrix& m){
+      TDynamicMatrix tmp(m.sz);
+      for (int i = 0; i < m.sz; i++)
+          for (int j = 0; j < m.sz; j++)
+              tmp[i][j] = m[j][i];
+      return tmp;
+  }
 public:
   TDynamicMatrix(size_t s = 1) : TDynamicVector<TDynamicVector<T>>(s)
   {
@@ -217,8 +225,8 @@ public:
       pMem[i] = TDynamicVector<T>(sz);
   }
 
+  using TDynamicVector<TDynamicVector<T>>::size;
   using TDynamicVector<TDynamicVector<T>>::operator[];
-
   // сравнение
   bool operator==(const TDynamicMatrix& m) const noexcept
   {
@@ -232,7 +240,7 @@ public:
   }
 
   // матрично-скалярные операции
-  TDynamicVector<T> operator*(const T& val)
+  TDynamicMatrix operator*(const T& val)
   {
       TDynamicMatrix tmp(sz);
       for (int i = 0; i < sz; i++)
@@ -278,6 +286,13 @@ public:
   }
   TDynamicMatrix operator*(const TDynamicMatrix& m)
   {
+      int minSz = sz > m.sz ? m.sz : sz;
+      TDynamicMatrix res(minSz);
+      TDynamicMatrix tmp = transpose(m);
+      for (int i = 0; i < minSz; i++)
+          for (int j = 0; j < minSz; j++)
+              res[i][j] = pMem[i] * tmp[j];
+      return res;
   }
 
   // ввод/вывод
