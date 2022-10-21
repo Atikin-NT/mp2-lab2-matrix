@@ -147,32 +147,26 @@ public:
   // векторные операции
   TDynamicVector operator+(const TDynamicVector& v)
   {
-      int maxLen = sz > v.sz ? sz : v.sz;
-      TDynamicVector tmp(maxLen);
-      int i = 0;
-      for (; i < sz && i < v.sz; i++)
+      if(sz != v.sz)
+          throw out_of_range("Vectors are different size");
+      TDynamicVector tmp(v.sz);
+      for (int i = 0; i < sz && i < v.sz; i++)
           tmp.pMem[i] = pMem[i] + v.pMem[i];
-      for (; i < sz; i++)
-          tmp.pMem[i] = pMem[i];
-      for (; i < v.sz; i++)
-          tmp.pMem[i] = v.pMem[i];
       return tmp;
   }
   TDynamicVector operator-(const TDynamicVector& v)
   {
-      int maxLen = sz > v.sz ? sz : v.sz;
-      TDynamicVector tmp(maxLen);
-      int i = 0;
-      for (; i < sz && i < v.sz; i++)
+      if(sz != v.sz)
+          throw out_of_range("Vectors are different size");
+      TDynamicVector tmp(v.sz);
+      for (int i = 0; i < sz && i < v.sz; i++)
           tmp.pMem[i] = pMem[i] - v.pMem[i];
-      for (; i < sz; i++)
-          tmp.pMem[i] = pMem[i];
-      for (; i < v.sz; i++)
-          tmp.pMem[i] = -v.pMem[i];
       return tmp;
   }
-  T operator*(const TDynamicVector& v) noexcept(noexcept(T()))
+  T operator*(const TDynamicVector& v)
   {
+      if(sz != v.sz)
+          throw out_of_range("Vectors are different size");
       int res = 0;
       for(size_t i = 0; i < sz && i < v.sz; i++)
           res += pMem[i] * v.pMem[i];
@@ -220,7 +214,7 @@ public:
   TDynamicMatrix(size_t s = 1) : TDynamicVector<TDynamicVector<T>>(s)
   {
     if(s > MAX_MATRIX_SIZE)
-      throw out_of_range("s is under MAX_MATRIX_SIZE");
+      throw out_of_range("size is under MAX_MATRIX_SIZE");
     for (size_t i = 0; i < sz; i++)
       pMem[i] = TDynamicVector<T>(sz);
   }
@@ -260,37 +254,30 @@ public:
   // матрично-матричные операции
   TDynamicMatrix operator+(const TDynamicMatrix& m)
   {
-      int maxSize = sz > m.sz ? sz : m.sz;
-      TDynamicMatrix tmp(maxSize);
-      int i = 0;
-      for (; i < sz && i < m.sz; i++)
+      if(sz != m.sz)
+          throw out_of_range("Matrix are different size");
+      TDynamicMatrix tmp(sz);
+      for (int i = 0; i < sz; i++)
           tmp.pMem[i] = pMem[i] + m.pMem[i];
-      for (; i < sz; i++)
-          tmp.pMem[i] = pMem[i];
-      for (; i < m.sz; i++)
-          tmp.pMem[i] = m.pMem[i];
       return tmp;
   }
   TDynamicMatrix operator-(const TDynamicMatrix& m)
   {
-      int maxSize = sz > m.sz ? sz : m.sz;
-      TDynamicMatrix tmp(maxSize);
-      int i = 0;
-      for (; i < sz && i < m.sz; i++)
+      if(sz != m.sz)
+          throw out_of_range("Matrix are different size");
+      TDynamicMatrix tmp(sz);
+      for (int i = 0; i < sz; i++)
           tmp.pMem[i] = pMem[i] - m.pMem[i];
-      for (; i < sz; i++)
-          tmp.pMem[i] = pMem[i];
-      for (; i < m.sz; i++)
-          tmp.pMem[i] = m.pMem[i] * (-1);
       return tmp;
   }
   TDynamicMatrix operator*(const TDynamicMatrix& m)
   {
-      int minSz = sz > m.sz ? m.sz : sz;
-      TDynamicMatrix res(minSz);
+      if(sz != m.sz)
+          throw out_of_range("Matrix are different size");
+      TDynamicMatrix res(sz);
       TDynamicMatrix tmp = transpose(m);
-      for (int i = 0; i < minSz; i++)
-          for (int j = 0; j < minSz; j++)
+      for (int i = 0; i < sz; i++)
+          for (int j = 0; j < sz; j++)
               res[i][j] = pMem[i] * tmp[j];
       return res;
   }
